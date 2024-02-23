@@ -7,12 +7,21 @@
   <test thread-count="5" name="RegressionTest(failed)">
     <parameter name="browserName" value="chrome"/>
     <classes>
+      <class name="com.salesforce.automation.SalesforceRandomScenarios">
+        <methods>
+          <include name="setUpBeforeMethod"/>
+          <include name="tabcustomization_TC35"/>
+          <include name="tearDownAfterTestMethod"/>
+        </methods>
+      </class> <!-- com.salesforce.automation.SalesforceRandomScenarios -->
       <class name="com.salesforce.automation.SalesforceUserMenu">
         <methods>
           <include name="setUpBeforeMethod"/>
+          <include name="mysettings_TC07"/>
           <include name="selectMyProfile_TC06"/>
+          <include name="changeusername"/>
+          <include name="chatterappmenu"/>
           <include name="tearDownAfterTestMethod"/>
-          <include name="usermenuLogout_TC09"/>
         </methods>
       </class> <!-- com.salesforce.automation.SalesforceUserMenu -->
     </classes>

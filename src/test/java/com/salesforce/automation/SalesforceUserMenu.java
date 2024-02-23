@@ -27,7 +27,7 @@ import com.salesforce.base.BaseSalesforce;
 public class SalesforceUserMenu extends BaseSalesforce {
 	protected Logger AutomationSalesforceUserMenulog=LogManager.getLogger();
 	//Precondition Testcase to Change the username as Santhi K
-	@Test(priority = 1)
+	@Test(priority=1)
 	public void changeusername() throws InterruptedException {
 		login_salesforce();
 		WebElement user_menu=driver.findElement(By.id("userNav"));
@@ -51,12 +51,12 @@ public class SalesforceUserMenu extends BaseSalesforce {
 	}
 	
 	
-	@Test(dependsOnMethods ="changeusername" )
+	@Test
 	public void selectUserMenu_TC05() {
 		login_salesforce();
 		String Exp_Title="Home Page ~ Salesforce - Developer Edition";
 		Assert.assertEquals(getTitle(), Exp_Title);
-		String Exp_username="Santhi K";
+		String Exp_username="Santhi Krishna";
 		WebElement user_menu=driver.findElement(By.id("userNav"));
 		String act_username=getTextFromElement(user_menu, "Username");
 		Assert.assertEquals(act_username,Exp_username);
@@ -69,7 +69,7 @@ public class SalesforceUserMenu extends BaseSalesforce {
 		String[] act_list= {"My Profile","My Settings","Developer Console","Switch to Lightning Experience","Logout"};
 		validatedropdownoptions(view_list,act_list);
 	}
-	@Test(dependsOnMethods ="selectUserMenu_TC05" )
+	@Test(priority=2,dependsOnMethods ="changeusername" )
 	public void selectMyProfile_TC06() throws InterruptedException, AWTException {
 		login_salesforce();
 		String Exp_Title="Home Page ~ Salesforce - Developer Edition";
@@ -209,6 +209,7 @@ public class SalesforceUserMenu extends BaseSalesforce {
 			WebElement app_menu1=driver.findElement(By.id("tsid"));
 			clickElement(app_menu1, "App Menu");
 			WebElement sales_menu=driver.findElement(By.xpath("//div[@id='tsid-menuItems']/a[contains(text(),'Sales')]"));
+			waitForVisibility(sales_menu, 30, "Sales");
 			clickElement(sales_menu, "Sales");
 			WebElement user_menu=driver.findElement(By.id("userNav"));
 			clickElement(user_menu, "User Menu");
@@ -233,6 +234,7 @@ public class SalesforceUserMenu extends BaseSalesforce {
 		WebElement app_menu1=driver.findElement(By.id("tsid"));
 		clickElement(app_menu1, "App Menu");
 		WebElement sales_menu=driver.findElement(By.xpath("//div[@id='tsid-menuItems']/a[contains(text(),'Sales')]"));
+		waitForVisibility(sales_menu, 30, "Sales");
 		clickElement(sales_menu, "Sales");
 		AutomationSalesforceUserMenulog.info("Appmenu changed from Salesforce Chatter to Sales");
 	}
@@ -297,12 +299,6 @@ public class SalesforceUserMenu extends BaseSalesforce {
 		clickElement(save, "Save");
 		WebElement app_menu=driver.findElement(By.id("tsid"));
 		clickElement(app_menu, "App Menu");
-//		WebElement marketing=driver.findElement(By.xpath("//a[contains(text(),'Marketing CRM Classic')]"));
-//		waitForVisibility(marketing, 30, "Marketing");
-//		clickElement(marketing, "Marketing");
-//		WebElement rep_tab2=driver.findElement(By.id("report_Tab"));
-//		String text2=rep_tab2.getText();
-//		validatetextwithactual(Exp_text,"Tab Name in Marketing CRM Classic", text2);
 		WebElement salesforce_chatter=driver.findElement(By.xpath("//div[@id='tsid-menuItems']/a[contains(text(),'Salesforce Chatter')]"));
 		waitForVisibility(salesforce_chatter, 30, "Salesforce Chatter");
 		clickElement(salesforce_chatter, "Salesforce Chatter");
@@ -374,17 +370,15 @@ public class SalesforceUserMenu extends BaseSalesforce {
 				driver.switchTo().window(handle); 
 				String exp_title="Developer Console";
 				Assert.assertEquals(getTitle(), exp_title);
-//				driver.switchTo().window(handle).close();
-//				AutomationSalesforceUserMenulog.info("Closed the current active window");
 			}
 			
 		}
-//		AutomationSalesforceUserMenulog.info("Closed the browser instance");
 		
 	}
 	@Test
 	public void usermenuLogout_TC09() throws InterruptedException {
 		login_salesforce();
+		waitUntilPageLoads();
 		String Exp_Title="Home Page ~ Salesforce - Developer Edition";
 		Assert.assertEquals(getTitle(), Exp_Title);
 		String Exp_username="Santhi Krishna";

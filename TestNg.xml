@@ -7,13 +7,13 @@
   <test  name="RegressionTest">
 	   <parameter name="browserName" value="chrome"></parameter>
     <classes>
-   <class name="com.salesforce.automation.SalesforceLogin"/>    
-   <class name="com.salesforce.automation.SalesforceLeads"/>    
-   <class name="com.salesforce.automation.SalesforceOpportunity"/>
-  <class name="com.salesforce.automation.SalesforceUserMenu"/> 
-    <class name="com.salesforce.automation.SalesforceAccount"/> 
-      <class name="com.salesforce.automation.SalesforceContacts"/>
-      <class name="com.salesforce.automation.SalesforceRandomScenarios"/>   
+       <class name="com.salesforce.automation.SalesforceLogin"/>
+       <class name="com.salesforce.automation.SalesforceUserMenu"/> 
+       <class name="com.salesforce.automation.SalesforceAccount"/>   
+       <class name="com.salesforce.automation.SalesforceOpportunity"/>  
+       <class name="com.salesforce.automation.SalesforceLeads"/>    
+       <class name="com.salesforce.automation.SalesforceContacts"/>
+       <class name="com.salesforce.automation.SalesforceRandomScenarios"/>   
     </classes>
   </test> <!-- RegressionTest -->
   

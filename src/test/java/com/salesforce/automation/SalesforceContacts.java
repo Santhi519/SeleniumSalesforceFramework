@@ -173,6 +173,7 @@ public class SalesforceContacts extends BaseSalesforce {
 	@Test
 	public void save_New_TC32(){
 		login_salesforce();
+		waitUntilPageLoads();
 		String Exp_Title="Home Page ~ Salesforce - Developer Edition";
 		Assert.assertEquals(getTitle(), Exp_Title);
 		WebElement con_tab=driver.findElement(By.id("Contact_Tab"));

@@ -6,8 +6,8 @@
       <class name="com.salesforce.automation.SalesforceRandomScenarios">
         <methods>
           <include name="setUpBeforeMethod"/>
-          <include name="blockeventrecurrence_TC37"/>
           <include name="tearDownAfterTestMethod"/>
+          <include name="blockevent_TC36"/>
         </methods>
       </class> <!-- com.salesforce.automation.SalesforceRandomScenarios -->
     </classes>

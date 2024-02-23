@@ -18,7 +18,7 @@ public class SalesforceAccount extends BaseSalesforce {
 	protected Logger AutomationSalesforceAccountlog=LogManager.getLogger();
 	
 	//Testcase for Removing Accounts tab from Menu bar for TC10a
-	@Test(priority = 1)
+	@Test(priority=3)
 	public void removeaccountstab() throws InterruptedException {
 		login_salesforce();
 		List<WebElement> tabs=driver.findElements(By.xpath("//ul[@id='tabBar']/li/a[contains(text(),'Accounts')]"));
@@ -40,7 +40,7 @@ public class SalesforceAccount extends BaseSalesforce {
 			AutomationSalesforceAccountlog.info("Accounts Tab is removed");
 	}
 	
-	@Test(dependsOnMethods ="removeaccountstab" )
+	@Test(priority=4,dependsOnMethods ="removeaccountstab" )
 	public void CreateAccountTab_TC10a() throws InterruptedException {
 		login_salesforce();
 		WebElement tab=driver.findElement(By.className("allTabsArrow"));
@@ -154,46 +154,9 @@ public class SalesforceAccount extends BaseSalesforce {
 		String Exp_text=getTextFromElement(select.getFirstSelectedOption(),"View");  
 		Assert.assertEquals(act_text,Exp_text);
 	}
-	@Test(priority = 2)
-	public void accountviewname() {
-		login_salesforce();
-		WebElement acc_tab=driver.findElement(By.id("Account_Tab"));
-		clickElement(acc_tab, "Account Tab");
-		WebElement view_list=driver.findElement(By.id("fcf"));
-		Select sel=new Select(view_list);
-		List<WebElement> list=sel.getOptions();
-		for (WebElement i : list) {
-			if (i.getText().equalsIgnoreCase("All Accounts")) {
-				WebElement edit=driver.findElement(By.linkText("Edit"));
-				clickElement(edit, "Edit Link");
-				WebElement last_activity=driver.findElement(By.id("colselector_select_1"));
-				selectByTextData(last_activity,"Last Activity","Last Activity");
-				WebElement remove=driver.findElement(By.id("colselector_select_0_left"));
-				clickElement(remove, "Remove");
-				WebElement save=driver.findElement(By.name("save"));
-				waitForVisibility(save, 30, "save");
-				clickElement(save, "Save");
-				break;
-			}else if(i.getText().equalsIgnoreCase("All Salesforce Accounts")) {
-				WebElement edit=driver.findElement(By.linkText("Edit"));
-				clickElement(edit, "Edit Link");
-				WebElement new_acc=driver.findElement(By.id("fname"));
-				clearElement(new_acc,"Account Name");
-				enterText(new_acc, "All Accounts", "View Name");
-//				WebElement last_activity=driver.findElement(By.id("colselector_select_1"));
-//				selectByTextData(last_activity,"Last Activity","Last Activity");
-//				WebElement remove=driver.findElement(By.id("colselector_select_0_left"));
-//				clickElement(remove, "Remove");
-				WebElement save=driver.findElement(By.name("save"));
-				waitForVisibility(save, 30, "save");
-				clickElement(save, "Save");
-				break;
-			}
-		}
-		
-	}
+
 	//Make sure view_list name is 'All Accounts' and Last activity is not selected while creating view name
-	@Test(dependsOnMethods ="accountviewname" )
+	@Test
 	public void Editview_TC12() {
 		login_salesforce();
 		String Exp_Title="Home Page ~ Salesforce - Developer Edition";
@@ -232,7 +195,7 @@ public class SalesforceAccount extends BaseSalesforce {
 		WebElement save=driver.findElement(By.name("save"));
 		waitForVisibility(save, 30, "save");
 		clickElement(save, "Save");
-		WebElement view=driver.findElement(By.id("00Bal000000ETNX_listSelect"));
+		WebElement view=driver.findElement(By.name("fcf"));  //id("00Bal000000ETNX_listSelect")
 		String Exp_text="All Salesforce Accounts";
 		Select select4=new Select(view);
 		String act_text=getTextFromElement(select4.getFirstSelectedOption(),"view name"); 
@@ -251,9 +214,24 @@ public class SalesforceAccount extends BaseSalesforce {
 			 AutomationSalesforceAccountlog.info("View has displayed as per the criteria selected");
 			 }
 		 }
+		 AutomationSalesforceAccountlog.info("Testcase execution has completed and reverting back the changes made");
+		 WebElement view_list1=driver.findElement(By.name("fcf"));
+		 selectByTextData(view_list1,"All Salesforce Accounts", "View_List");
+		 WebElement edit1=driver.findElement(By.linkText("Edit"));
+		clickElement(edit1, "Edit Link");
+			WebElement new_acc1=driver.findElement(By.id("fname"));
+			clearElement(new_acc1,"Account Name");
+			enterText(new_acc1, "All Accounts", "View Name");
+			WebElement last_activity1=driver.findElement(By.id("colselector_select_1"));
+			selectByTextData(last_activity1,"Last Activity","Last Activity");
+			WebElement remove=driver.findElement(By.id("colselector_select_0_left"));
+			clickElement(remove, "Remove");
+			WebElement save1=driver.findElement(By.name("save"));
+			waitForVisibility(save1, 30, "save");
+			clickElement(save1, "Save");
 	}
 	//Make sure there are more than 2 accounts for the given account name
-	@Test
+	@Test(dependsOnMethods ="CreateAccount_TC10" )
 	public void MergeAccounts_TC13() {
 		login_salesforce();
 		String Exp_Title="Home Page ~ Salesforce - Developer Edition";
@@ -294,7 +272,7 @@ public class SalesforceAccount extends BaseSalesforce {
 		 }
 	}
 	//Make sure to pass different Report unique name than existing-used Random Number generator for this
-	@Test
+	@Test(dependsOnMethods ="CreateAccount_TC10" )
 	public void Createaccountreport_TC14() throws InterruptedException {
 		login_salesforce();
 		String Exp_Title="Home Page ~ Salesforce - Developer Edition";
@@ -343,7 +321,7 @@ public class SalesforceAccount extends BaseSalesforce {
 		clickElement(unique_name, "Report Unique name textbox");
 		clearElement(unique_name,"Report Unique Name");
 		Random rand = new Random();
-		int rand_int = rand.nextInt(100);
+		int rand_int = rand.nextInt(1000);
 		enterText(unique_name,"Today_Report"+rand_int,"Report Unique Name");
 		WebElement save_run=driver.findElement(By.xpath("//table[@id='dlgSaveAndRun']/tbody/tr[2]/td[2]/em/button"));   
 		waitForVisibility(save_run, 30,"Save and Run");

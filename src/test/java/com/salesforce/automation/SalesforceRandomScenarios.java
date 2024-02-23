@@ -1,5 +1,7 @@
 package com.salesforce.automation;
 
+import static org.testng.Assert.ARRAY_MISMATCH_TEMPLATE;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -20,7 +22,7 @@ import com.salesforce.base.BaseSalesforce;
 public class SalesforceRandomScenarios extends BaseSalesforce {
 	protected Logger AutomationSalesforceRandomScenarioslog=LogManager.getLogger();
 	
-	@Test(priority = 1)
+	@Test
 	public void validatename_TC33() {
 		login_salesforce();
 		String Exp_Title="Home Page ~ Salesforce - Developer Edition";
@@ -74,31 +76,28 @@ public class SalesforceRandomScenarios extends BaseSalesforce {
 		String Exp_username2="Santhi ABCD ";
 		String act_username2=getTextFromElement(username2, "Username");
 		Assert.assertEquals(act_username2,Exp_username2);
+		//Reverting back to the old username to avoid conflicts
+		WebElement user_menu=driver.findElement(By.id("userNav"));
+		clickElement(user_menu, "User Menu");
+		WebElement my_profile=driver.findElement(By.xpath("//*[@id=\"userNav-menuItems\"]/a[1]"));
+		clickElement(my_profile, "My Profile link");
+		Thread.sleep(2000);
+		WebElement edit1=driver.findElement(By.className("contactInfoLaunch"));
+		clickElement(edit1, "Edit Contact");
+		Thread.sleep(2000);
+		driver.switchTo().frame("contactInfoContentId");
+		AutomationSalesforceRandomScenarioslog.info("Switched to pop-up window");
+		WebElement about_tab1=driver.findElement(By.xpath("//a[contains(text(),'About')]"));
+		AutomationSalesforceRandomScenarioslog.info("username changed to Santhi Krishna");
+		clickElement(about_tab1, "About tab");
+		WebElement last_name1=driver.findElement(By.id("lastName"));
+		enterText(last_name1, "Krishna", "Last Name");
+		WebElement save_all1=driver.findElement(By.xpath("//input[@value='Save All']"));
+		clickElement(save_all1, "Save All");
+		driver.switchTo().defaultContent();
 	}
+	
 	@Test
-	public void addaccountstab() throws InterruptedException {
-			login_salesforce();
-			List<WebElement> tabs=driver.findElements(By.xpath("//ul[@id='tabBar']/li/a[contains(text(),'Accounts')]"));
-			if(tabs.size()>0) {
-				AutomationSalesforceRandomScenarioslog.info("Accounts Tab is displayed");
-			}else
-				AutomationSalesforceRandomScenarioslog.info("Accounts Tab is removed");
-			WebElement tab=driver.findElement(By.className("allTabsArrow"));
-			clickElement(tab, "+");
-			WebElement custom_tab=driver.findElement(By.className("btnImportant"));
-			clickElement(custom_tab, "Customize my Tabs");
-			WebElement account=driver.findElement(By.id("duel_select_0"));
-			selectByTextData(account, "Accounts", "Accounts");
-			Thread.sleep(2000);
-			WebElement add=driver.findElement(By.id("duel_select_0_right"));
-			clickElement(add, "Add");
-			WebElement save=driver.findElement(By.name("save"));
-			clickElement(save, "Save");
-			AutomationSalesforceRandomScenarioslog.info("Now the Accounts Tab is removed");
-		
-	}
-	//Make sure Accounts should be in selected Tabs
-	@Test(dependsOnMethods ="addaccountstab" )
 	public void tabcustomization_TC35() throws InterruptedException {
 		login_salesforce();
 		WebElement tab=driver.findElement(By.className("allTabsArrow"));
@@ -109,13 +108,13 @@ public class SalesforceRandomScenarios extends BaseSalesforce {
 		clickElement(custom_tab, "Customize my Tabs");
 		String Exp_Title1="Customize My Tabs ~ Salesforce - Developer Edition";
 		Assert.assertEquals(getTitle(), Exp_Title1);
-		WebElement account=driver.findElement(By.id("duel_select_1"));
-		selectByTextData(account,"Accounts", "Accounts");
+		WebElement Cases=driver.findElement(By.id("duel_select_1"));
+		selectByTextData(Cases,"Cases", "Cases");
 		WebElement remove=driver.findElement(By.id("duel_select_0_left"));
 		clickElement(remove, "Remove");
-		WebElement account_sel=driver.findElement(By.id("duel_select_0"));
-		Select select1=new Select(account_sel);
-		String Exp_text="Accounts";
+		WebElement Cases_sel=driver.findElement(By.id("duel_select_0"));
+		Select select1=new Select(Cases_sel);
+		String Exp_text="Cases";
 		String act_text=select1.getFirstSelectedOption().getText();
 		Assert.assertEquals(act_text, Exp_text);
 		WebElement save=driver.findElement(By.name("save"));
@@ -139,11 +138,22 @@ public class SalesforceRandomScenarios extends BaseSalesforce {
 		Thread.sleep(3000);
 		String Exp_Title3="Home Page ~ Salesforce - Developer Edition";
 		Assert.assertEquals(getTitle(), Exp_Title3);
-		List<WebElement> tabs=driver.findElements(By.xpath("//ul[@id='tabBar']/li/a[contains(text(),'Accounts')]"));
+		List<WebElement> tabs=driver.findElements(By.xpath("//ul[@id='tabBar']/li/a[contains(text(),'Cases')]"));
 		if(tabs.size()>0) {
-			AutomationSalesforceRandomScenarioslog.info("Accounts Tab is displayed");
+			AutomationSalesforceRandomScenarioslog.info("Cases Tab is displayed");
 		}else
-			AutomationSalesforceRandomScenarioslog.info("Accounts Tab is removed");
+			AutomationSalesforceRandomScenarioslog.info("Cases Tab is removed");
+		AutomationSalesforceRandomScenarioslog.info("Testcase execution completed ,so reverting back the changes to avoid the conflicts");
+		WebElement tab1=driver.findElement(By.className("allTabsArrow"));
+		clickElement(tab1, "+");
+		WebElement custom_tab1=driver.findElement(By.className("btnImportant"));
+		clickElement(custom_tab1, "Customize my Tabs");
+		WebElement Case=driver.findElement(By.id("duel_select_0"));
+		selectByTextData(Case,"Cases", "Cases");
+		WebElement add=driver.findElement(By.id("duel_select_0_right"));
+		clickElement(add, "Add");
+		WebElement save1=driver.findElement(By.name("save"));
+		clickElement(save1, "Save");
 	}
 	@Test
 	public void blockevent_TC36() throws InterruptedException {
@@ -160,7 +170,7 @@ public class SalesforceRandomScenarios extends BaseSalesforce {
 		String act_today=getTextFromElement(current_date, "Date Link");
 		Assert.assertEquals(act_today,  today);
 		clickElement(current_date, "Current Date Link");
-		String Exp_Title1="Calendar for Santhi ABCD ~ Salesforce - Developer Edition";
+		String Exp_Title1="Calendar for Santhi Krishna ~ Salesforce - Developer Edition";
 		Assert.assertEquals(getTitle(), Exp_Title1);
 		WebElement table= driver.findElement(By.id("calTable")); 
 		waitForVisibility(table, 30, "Table");
@@ -184,13 +194,7 @@ public class SalesforceRandomScenarios extends BaseSalesforce {
 		driver.switchTo().window(Parentwindowhandle);
 		Thread.sleep(3000);
 		String exp_text="Other";
-//		WebElement sub=driver.findElement(By.id("evt5"));
-//		clickElement(sub, "subject");
-//		Thread.sleep(3000);
-//		String act_text=getTextFromElement(sub, "Subject");
-//		SoftAssert sa=new SoftAssert();
-//		sa.assertEquals(act_text, exp_text);
-//		sa.assertAll();
+		
 		WebElement end_time=driver.findElement(By.id("EndDateTime_time"));
 		String exp_time="9:00 PM";
 		String act_time=end_time.getAttribute("value");
@@ -217,7 +221,7 @@ public class SalesforceRandomScenarios extends BaseSalesforce {
 		WebElement current_date=driver.findElement(By.xpath("//*[@id=\"ptBody\"]/div/div[2]/span[2]/a"));   
 		validatetextwithactual(today, "Today date Link", getTextFromElement(current_date, "Date Link"));
 		clickElement(current_date, "Current Date Link");
-		String Exp_Title1="Calendar for Santhi ABCD ~ Salesforce - Developer Edition";
+		String Exp_Title1="Calendar for Santhi Krishna ~ Salesforce - Developer Edition";
 		Assert.assertEquals(getTitle(), Exp_Title1);
 		WebElement table= driver.findElement(By.id("calTable")); 
 		waitForVisibility(table, 30, "Table");
@@ -253,7 +257,7 @@ public class SalesforceRandomScenarios extends BaseSalesforce {
 		clickElement(end_time, "7:00 PM");
 		Thread.sleep(1000);
 		String exp_time="7:00 PM";
-		String act_time=end_time.getAttribute("value");
+		String act_time=end_time1.getAttribute("value");
 		Assert.assertEquals(act_time, exp_time);
 		WebElement is_recur=driver.findElement(By.id("IsRecurrence"));
 		clickElement(is_recur, "Create Recurring Series of Events");
@@ -317,7 +321,7 @@ public class SalesforceRandomScenarios extends BaseSalesforce {
 		Assert.assertEquals(act_text1, exp_text);
 		WebElement month_view=driver.findElement(By.className("monthViewIcon"));
 		clickElement(month_view, "Month View Icon");
-		String Exp_Title4="Calendar for Santhi ABCD - Month View ~ Salesforce - Developer Edition";
+		String Exp_Title4="Calendar for Santhi Krishna - Month View ~ Salesforce - Developer Edition";
 		Assert.assertEquals(getTitle(), Exp_Title4);
 		WebElement month_table= driver.findElement(By.xpath("//table[@class='calendarMonthView secondaryPalette']/tbody"));  
 		List<WebElement> month_data= month_table.findElements(By.xpath("//tr/td/div/a[2]"));
